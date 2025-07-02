@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selamat, Nadia Oktaviani!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #046380, #3a9ecb);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      color: #fff;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #e0f0f8;
+      margin: 15px auto;
+      max-width: 90%;
+    }
+
+    .quote {
+      font-style: italic;
+      color: #d0e6f4;
+      margin-top: 30px;
+    }
+
+    #mainContent {
+      display: none;
+      animation: fadeIn 1s ease-in;
+      padding-bottom: 50px;
+    }
+
+    #certificate {
+      border: 3px dashed #ffffffcc;
+      padding: 20px;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 600px;
+      background: #ffffffcc;
+      border-radius: 10px;
+    }
+
+    #certificate h2 {
+      color: #fff;
+    }
+
+    #certificate p {
+      color: #102a43; /* navy gelap */
+      text-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
+      font-weight: 600;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .envelope {
+      width: 120px;
+      max-width: 80%;
+      cursor: pointer;
+      margin-top: 50px;
+      transition: transform 0.3s ease;
+      animation: blink 1.5s infinite;
+    }
+
+    .envelope:hover {
+      transform: scale(1.1);
+    }
+
+    .no-blink {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 1.8em; }
+      p { font-size: 1em; }
+      .envelope {
+        width: 90px;
+      }
+    }
+
+    #photo-frame {
+      margin: 20px auto;
+      max-width: 300px;
+      border: 5px solid #ffffffcc;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 2s ease-in;
+    }
+
+    #photo-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .caption {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #d0e6f4;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+
+  <img
+    src="https://i.imgur.com/FRHmYYF.png"
+    alt="Buka Kejutan"
+    class="envelope"
+    id="envelopeBtn"
+    onclick="startCelebration()"
+  />
+
+  <div id="mainContent">
+    <h1 id="typewriter"></h1>
+
+    <div id="photo-frame">
+      <img
+        src="https://i.imgur.com/csJxa9x.jpeg"
+        alt="Foto Nadia Oktaviani"
+      />
+      <div class="caption">"Ratu Revisi Hari Ini, Master Skripsi Besok."</div>
+    </div>
+
+    <p>
+      “Yow, sidang proposal kelar! Kerja kerasmu udah kayak superhero: cape-nya udah terbang! 🎉 Sekarang siap-siap jadi jagoan skripsi💪😄”
+    </p>
+
+    <div class="quote">"Sukses bukan kunci kebahagiaan. Kebahagiaanlah kunci sukses"</div>
+
+    <div id="certificate">
+      <h2>🎖️ Sertifikat</h2>
+      <p>
+        Dengan ini menyatakan bahwa <strong>Nadia Oktaviani</strong> telah resmi
+        menaklukkan sidang proposal dengan penuh gaya dan keberanian! 💥
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let pieces = [];
+    const numberOfPieces = 150;
+
+    for (let i = 0; i < numberOfPieces; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        size: Math.random() * 10 + 5,
+        speed: Math.random() * 3 + 2,
+        angle: Math.random() * 2 * Math.PI,
+        spin: Math.random() * 0.1 - 0.05,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+      });
+    }
+
+    let animationId;
+
+    function updateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of pieces) {
+        p.y += p.speed;
+        p.angle += p.spin;
+        if (p.y > canvas.height) {
+          p.y = -p.size;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      }
+      animationId = requestAnimationFrame(updateConfetti);
+    }
+
+    function stopConfetti() {
+      cancelAnimationFrame(animationId);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    const message = "Selamat, Nadia Oktaviani! 🎓";
+    let index = 0;
+    function typeWriter() {
+      if (index < message.length) {
+        document.getElementById("typewriter").innerHTML += message.charAt(index);
+        index++;
+        setTimeout(typeWriter, 60);
+      }
+    }
+
+    function startCelebration() {
+      // Hentikan animasi berkedip amplop
+      const envelope = document.getElementById("envelopeBtn");
+      envelope.classList.add("no-blink");
+
+      // Sembunyikan amplop agar tidak bisa diklik lagi
+      envelope.style.pointerEvents = "none";
+
+      // Tampilkan konten utama dan sembunyikan amplop
+      envelope.style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+
+      typeWriter();
+      updateConfetti();
+      setTimeout(stopConfetti, 5000);
+    }
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
